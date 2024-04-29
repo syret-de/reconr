@@ -1,0 +1,10 @@
+---
+workPath: "/mount"
+mountPath: "./out"
+logfile: "./log"
+target: "scanme.sh"
+
+# If you define no scope, there will be no scope validation
+scope:
+  #- 192.168.10.0/24
+  #- 192.168.20.0/24
