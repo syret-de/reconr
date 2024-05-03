@@ -6,11 +6,14 @@ import (
 )
 
 type Config struct {
-	WorkPath  string   `yaml:"workPath"`
-	MountPath string   `yaml:"mountPath"`
-	Logfile   string   `yaml:"logfile"`
-	Target    string   `yaml:"target"`
-	Scope     []string `yaml:"scope"`
+	MountWork     string   `yaml:"mountWork"`
+	WorkPath      string   `yaml:"workPath"`
+	Logfile       string   `yaml:"logfile"`
+	ScopeFileName string   `yaml:"scopeFileName"`
+	Target        string   `yaml:"target"`
+	Scope         []string `yaml:"scope"`
+	ConfigPath    string   `yaml:"configPath"`
+	MountConfig   string   `yaml:"mountConfig"`
 }
 
 func NewConfig(path string) (Config, error) {
@@ -27,12 +30,12 @@ func NewConfig(path string) (Config, error) {
 	return config, nil
 }
 
-func (c *Config) getWorkPath() string {
+func (c *Config) GetWorkPath() string {
 	return c.WorkPath
 }
 
-func (c *Config) getMountPath() string {
-	return c.MountPath
+func (c *Config) GetMountWork() string {
+	return c.MountWork
 }
 
 func (c *Config) GetLogPath() string {
@@ -45,4 +48,16 @@ func (c *Config) GetTarget() string {
 
 func (c *Config) GetScope() []string {
 	return c.Scope
+}
+
+func (c *Config) GetConfigPath() string {
+	return c.ConfigPath
+}
+
+func (c *Config) GetMountConfig() string {
+	return c.MountConfig
+}
+
+func (c *Config) GetScopeFileName() string {
+	return c.ScopeFileName
 }

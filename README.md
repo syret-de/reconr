@@ -27,10 +27,13 @@ A(subdomain) -->B(httpx)
 - [x] Faire quelque chose pour le scope
 - [ ] Droit sur les fichers out
 - [ ] Procedure d'install
-- [ ] Plus de config
+- [x] Plus de config
 - [ ] Faire fonctionner deux containers en parallèle
 - [ ] Refactor le code
 - [ ] Faire quelque chose avec dnsx, alterx, nabuu
+- [ ] Fixer docker build a chauqe fois
+- 2024/04/30 08:56:09 Error response from daemon: invalid mount config for type "bind": bind source path does not exist: /home/yann/GolandProjects/reconr/test/config
+
 https://github.com/1ndianl33t/Gf-Patterns
 https://github.com/tomnomnom/waybackurls
 

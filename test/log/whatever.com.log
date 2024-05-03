@@ -1,0 +1,7 @@
+2024/04/30 09:39:04.378431 [*] Docker build started
+2024/04/30 09:39:04.381429 [*] Task 1 Started
+2024/04/30 09:39:04.381456 [*] Docker run echo '192.168.10.10
+192.168.20.10
+127.0.0.1' > target.txt;cat target.txt| grepcidr -f scope.txt > validScope.txt
+2024/04/30 09:39:04.533528 [*] Created container 72a508c305ab6c1a6f283ad28175d61dd3993446d68a41c4590600f8962074ae
+2024/04/30 09:39:04.817235 [*] Started container 72a508c305ab6c1a6f283ad28175d61dd3993446d68a41c4590600f8962074ae

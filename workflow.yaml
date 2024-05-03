@@ -3,19 +3,20 @@ tasks:
   1:
     name: "subdomain"
     commands:
-      - "subfinder -d {{ .Target }} > ./subdomain.txt"
+      - "subfinder -d {{ .Target }} -pc /config/subfinder-config.yaml -t 25 > ./subdomain.txt"
       - "echo {{ .Target }} >> subdomain.txt"
   2:
     name: "validSubdomain"
     commands:
-      - "httpx -l subdomain.txt -json -o validSubdomain.txt"
+      - "httpx -l subdomain.txt -no-stdin -json -o validSubdomain.txt"
   3:
     name: "validateScope"
     commands:
       - "cat validSubdomain.txt| grepcidr -f scope.txt | jq -r .input > validateScope.txt"
-      - "echo honey.scanme.sh >> validateScope.txt"
+
   4:
     name: "nuclei"
     commands:
-      - "nuclei -l validateScope.txt -tags cve -severity critical -jle nuclei.txt"
+      - "nuclei -l validateScope.txt -c 100 -no-stdin -tags cve -severity critical -jle nuclei.txt"
       #- "nuclei -l validateScope.txt -jle nuclei.txt"
+

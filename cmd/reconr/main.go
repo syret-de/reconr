@@ -1,21 +1,18 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"reconr/internal"
 )
 
 func main() {
-	workflowFile := "workflow.yaml"
-	configFile := "config.yaml"
-	scopeFile := "scope.txt"
-	//err := os.Setenv("NO_COLOR", "1")
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
+	workflowFile := flag.String("workflow", "workflow3.yaml", "Path to the workflow file")
+	configFile := flag.String("config", "config.yaml", "Path to the config file")
+	flag.Parse()
 
-	config, err := internal.NewConfig(configFile)
+	config, err := internal.NewConfig(*configFile)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,24 +26,27 @@ func main() {
 	log.Println("[*] Starting new scan [*]")
 	log.Println("=========================")
 
-	scope, err := internal.NewScope(config.GetScope(), config.GetTarget())
+	path := fmt.Sprintf("%s/%s", config.GetWorkPath(), config.GetTarget())
+	scope, err := internal.NewScope(config.GetScope(), path)
 	if err != nil {
 		log.Fatal(err)
 	}
-	scopePath := fmt.Sprintf("out/%s/%s", config.GetTarget(), scopeFile)
-	fmt.Println(scopePath)
+	scopePath := fmt.Sprintf("%s/%s/%s", config.GetWorkPath(), config.GetTarget(), config.GetScopeFileName())
 	err = scope.WriteScope(scopePath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	workflow, err := internal.NewWorkflow(workflowFile, config)
+	workflow, err := internal.NewWorkflow(*workflowFile, config)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	err = internal.Process(workflow, config, logger)
 	if err != nil {
-		log.Fatal(err)
+		//This error is caused by the task to be too fast. So the logs can not benn read.
+		if err.Error() != "Error response from daemon: can not get logs from container which is dead or marked for removal" {
+			log.Fatal(err)
+		}
 	}
 }

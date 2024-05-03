@@ -73,8 +73,17 @@ func (d *Docker) Run(commands string, id int) error {
 	log.Printf("[*] Task %d Started\n", id)
 	log.Printf("[*] Docker run %s\n", commands)
 
-	fullPath := fmt.Sprintf("%s/%s", d.config.getMountPath(), d.config.GetTarget())
-	path, err := filepath.Abs(fullPath)
+	fullPath := fmt.Sprintf("%s/%s", d.config.GetWorkPath(), d.config.GetTarget())
+	outPath, err := filepath.Abs(fullPath)
+	if err != nil {
+		return err
+	}
+
+	configPath, err := filepath.Abs(d.config.GetConfigPath())
+	if err != nil {
+		return err
+	}
+
 	config := container.Config{
 		Image: "reconr",
 		Cmd:   []string{commands},
@@ -86,10 +95,17 @@ func (d *Docker) Run(commands string, id int) error {
 		Mounts: []mount.Mount{
 			{
 				Type:   mount.TypeBind,
-				Source: path,
-				Target: d.config.getWorkPath(),
+				Source: outPath,
+				Target: d.config.GetMountWork(),
+			},
+			{
+				Type:   mount.TypeBind,
+				Source: configPath,
+				Target: d.config.GetMountConfig(),
 			},
 		},
+		//NetworkMode: container.NetworkMode("container:protonwire"),
+		NetworkMode: "bridge",
 	}
 
 	resp, err := d.cli.ContainerCreate(d.ctx, &config, &hostConfig, nil, nil, fmt.Sprintf("reconr%d", id))
@@ -105,17 +121,14 @@ func (d *Docker) Run(commands string, id int) error {
 		fmt.Println(err)
 		return err
 	}
-
 	statusCh, errCh := d.cli.ContainerWait(d.ctx, resp.ID, container.WaitConditionNotRunning)
 	select {
 	case err := <-errCh:
 		if err != nil {
-			fmt.Println(err)
 			return err
 		}
 	case <-statusCh:
 	}
-
 	out, err := d.cli.ContainerLogs(d.ctx, resp.ID, container.LogsOptions{ShowStdout: true, ShowStderr: true})
 	if err != nil {
 		return err
@@ -124,7 +137,6 @@ func (d *Docker) Run(commands string, id int) error {
 	log.Printf("[*] Task stdout: \n")
 	_, err = io.Copy(d.getLogFile(), out)
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
 	time.Sleep(100 * time.Millisecond)
