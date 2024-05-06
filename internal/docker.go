@@ -55,9 +55,10 @@ func (d *Docker) Build(path string, logger Logger) error {
 		Context:    buildCtx,
 		Dockerfile: "Dockerfile",
 		Tags:       []string{"reconr"},
+		Remove:     true,
 	}
 
-	logs, err := d.cli.ImageBuild(context.Background(), nil, opt)
+	logs, err := d.cli.ImageBuild(context.Background(), buildCtx, opt)
 	if err != nil {
 		return err
 	}

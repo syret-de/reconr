@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	workflowFile := flag.String("workflow", "workflow3.yaml", "Path to the workflow file")
+	workflowFile := flag.String("workflow", "workflow.yaml", "Path to the workflow file")
 	configFile := flag.String("config", "config.yaml", "Path to the config file")
 	flag.Parse()
 
@@ -49,4 +49,7 @@ func main() {
 			log.Fatal(err)
 		}
 	}
+	log.Println("=====================")
+	log.Println("[*] Scan finished [*]")
+	log.Println("=====================")
 }
