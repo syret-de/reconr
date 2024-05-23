@@ -60,3 +60,11 @@ root@PCYann:/tmp# grepcidr -f scope.txt target.txt
 
 192.168.10.1/0 -> all ips
 ```
+
+
+## References
+https://docs.docker.com/engine/api/sdk/examples/
+https://medium.com/gopher-time/working-with-golang-and-docker-sdk-a-practical-approach-1448c2452054
+https://santoshk.dev/posts/2023/unlocking-dockers-power-with-go-a-developers-perspective-part-1/
+https://santoshk.dev/posts/2023/unlocking-dockers-power-with-go-a-developers-perspective-part-2/
+

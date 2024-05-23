@@ -17,6 +17,7 @@ type Workflow struct {
 
 type tmpl struct {
 	Target string
+	Proxy  string
 }
 
 func NewWorkflow(file string, config Config) (Workflow, error) {
@@ -26,7 +27,7 @@ func NewWorkflow(file string, config Config) (Workflow, error) {
 	}
 
 	parsed := bytes.Buffer{}
-	err = input.Execute(&parsed, tmpl{Target: config.GetTarget()})
+	err = input.Execute(&parsed, tmpl{Target: config.GetTarget(), Proxy: config.GetProxy()})
 	if err != nil {
 		return Workflow{}, err
 	}

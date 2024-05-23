@@ -55,17 +55,18 @@ func (d *Docker) Build(path string, logger Logger) error {
 		Context:    buildCtx,
 		Dockerfile: "Dockerfile",
 		Tags:       []string{"reconr"},
-		Remove:     true,
 	}
 
 	logs, err := d.cli.ImageBuild(context.Background(), buildCtx, opt)
 	if err != nil {
 		return err
 	}
+
 	_, err = io.Copy(d.getLogFile(), logs.Body)
 	if err != nil {
 		return err
 	}
+
 	defer logs.Body.Close()
 	return nil
 }
@@ -105,8 +106,7 @@ func (d *Docker) Run(commands string, id int) error {
 				Target: d.config.GetMountConfig(),
 			},
 		},
-		//NetworkMode: container.NetworkMode("container:protonwire"),
-		NetworkMode: "bridge",
+		NetworkMode: "host",
 	}
 
 	resp, err := d.cli.ContainerCreate(d.ctx, &config, &hostConfig, nil, nil, fmt.Sprintf("reconr%d", id))
@@ -130,16 +130,23 @@ func (d *Docker) Run(commands string, id int) error {
 		}
 	case <-statusCh:
 	}
+
 	out, err := d.cli.ContainerLogs(d.ctx, resp.ID, container.LogsOptions{ShowStdout: true, ShowStderr: true})
 	if err != nil {
-		return err
+		// This happens when the task is too short
+		if err.Error() != "Error response from daemon: can not get logs from container which is dead or marked for removal" {
+			return err
+		}
+		log.Printf("[*] Task to short, no stdout\n")
+	} else {
+		log.Printf("[*] Task stdout: \n")
+		_, err = io.Copy(d.getLogFile(), out)
+		if err != nil {
+			return err
+		}
 	}
+
 	log.Printf("[*] Stopped container %s\n", resp.ID)
-	log.Printf("[*] Task stdout: \n")
-	_, err = io.Copy(d.getLogFile(), out)
-	if err != nil {
-		return err
-	}
 	time.Sleep(100 * time.Millisecond)
 	return nil
 }

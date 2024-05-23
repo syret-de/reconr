@@ -10,6 +10,7 @@ type Config struct {
 	WorkPath      string   `yaml:"workPath"`
 	Logfile       string   `yaml:"logfile"`
 	ScopeFileName string   `yaml:"scopeFileName"`
+	Proxy         string   `yaml:"proxy"`
 	Target        string   `yaml:"target"`
 	Scope         []string `yaml:"scope"`
 	ConfigPath    string   `yaml:"configPath"`
@@ -60,4 +61,8 @@ func (c *Config) GetMountConfig() string {
 
 func (c *Config) GetScopeFileName() string {
 	return c.ScopeFileName
+}
+
+func (c *Config) GetProxy() string {
+	return c.Proxy
 }

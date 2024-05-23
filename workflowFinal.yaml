@@ -1,0 +1,50 @@
+---
+tasks:
+  1:
+    name: "subdomain"
+    commands:
+      - "subfinder -d {{ .Target }} -duc -cs -pc /config/subfinder-config.yaml -json -o subfinder.txt"
+      - "cat subfinder.txt | jq -r .host > subdomain.txt"
+      - "echo {{ .Target }} >> subdomain.txt"
+  2:
+    name: "validateSubdomain"
+    commands:
+      - "httpx -l subdomain.txt -duc -td -cdn -json -o httpx.txt"
+  3:
+    name: "validateScope"
+    commands:
+      - "cat httpx.txt | grepcidr -f scope.txt | jq -r .input > validDomains.txt"
+  4:
+    name: "portScan"
+    commands:
+      - "naabu -l validDomains.txt -duc -Pn -o naabu.txt"
+  5:
+    name: "validatePorts"
+    commands:
+      - "httpx -l naabu.txt -duc -o validPorts.txt"
+  6:
+    name: "spidering"
+    commands:
+      - "katana -u validPorts.txt -duc -jc -fs fqdn -ct 5 -kf all -p 20 -c 20 -jsonl -o katana.txt"
+      - "cat katana.txt | jq -r .request.endpoint > endpoints.txt"
+  7:
+    name: "filter"
+    commands:
+      - "mkdir gf"
+      - "cat endpoints.txt | gf debug_logic | ifne tee gf/debug_logic.txt"
+      - "cat endpoints.txt | gf idor | ifne tee gf/idor.txt"
+      - "cat endpoints.txt | gf interestingEXT | ifne tee gf/interestingEXT.txt"
+      - "cat endpoints.txt | gf interestingparams | ifne tee gf/interestingparams.txt"
+      - "cat endpoints.txt | gf interestingsubs | ifne tee gf/interestingsubs.txt"
+      - "cat endpoints.txt | gf ssrf | ifne tee gf/ssrf.txt"
+      - "cat endpoints.txt | gf redirect | ifne tee gf/redirect.txt"
+      - "cat endpoints.txt | gf rce | ifne tee gf/rce.txt"
+      - "cat endpoints.txt | gf sqli | ifne tee gf/sqli.txt"
+      - "cat endpoints.txt | gf lfi | ifne tee gf/lfi.txt"
+      - "cat endpoints.txt | gf ssti | ifne tee gf/ssti.txt"
+      - "cat endpoints.txt | gf xss | ifne tee gf/xss.txt"
+  8:
+    name: "vulnScan"
+    commands:
+      - "nuclei -l validPorts.txt -c 100 -jle nuclei.txt"
+

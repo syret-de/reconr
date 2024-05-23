@@ -8,15 +8,18 @@ import (
 )
 
 func main() {
-	workflowFile := flag.String("workflow", "workflow.yaml", "Path to the workflow file")
+	// Parse command line flags
+	workflowFile := flag.String("workflow", "workflowProxy.yaml", "Path to the workflow file")
 	configFile := flag.String("config", "config.yaml", "Path to the config file")
 	flag.Parse()
 
+	// Initialize configuration
 	config, err := internal.NewConfig(*configFile)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// Initialize logger
 	logger, err := internal.NewLogger(config.GetLogPath(), config.GetTarget())
 	if err != nil {
 		log.Fatal(err)
@@ -27,28 +30,30 @@ func main() {
 	log.Println("=========================")
 
 	path := fmt.Sprintf("%s/%s", config.GetWorkPath(), config.GetTarget())
+
+	// Initialize scope
 	scope, err := internal.NewScope(config.GetScope(), path)
 	if err != nil {
 		log.Fatal(err)
 	}
-	scopePath := fmt.Sprintf("%s/%s/%s", config.GetWorkPath(), config.GetTarget(), config.GetScopeFileName())
+	scopePath := fmt.Sprintf("%s/%s", path, config.GetScopeFileName())
 	err = scope.WriteScope(scopePath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// Initialize workflow
 	workflow, err := internal.NewWorkflow(*workflowFile, config)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// Process workflow
 	err = internal.Process(workflow, config, logger)
 	if err != nil {
-		//This error is caused by the task to be too fast. So the logs can not benn read.
-		if err.Error() != "Error response from daemon: can not get logs from container which is dead or marked for removal" {
-			log.Fatal(err)
-		}
+		log.Fatal(err)
 	}
+
 	log.Println("=====================")
 	log.Println("[*] Scan finished [*]")
 	log.Println("=====================")

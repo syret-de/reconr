@@ -13,13 +13,14 @@ var check = "192.168.10.10\n192.168.20.10\n"
 var url = "whatever.com"
 
 func init() {
-	if _, err := os.Stat(fmt.Sprintf("./log/%s.log", url)); err == nil {
+	_, err := os.Stat(fmt.Sprintf("./log/%s.log", url))
+	if err == nil {
 		err := os.Remove(fmt.Sprintf("./log/%s.log", url))
 		if err != nil {
 			fmt.Println(err)
 		}
 	}
-	err := os.RemoveAll(fmt.Sprintf("./out/%s", url))
+	err = os.RemoveAll(fmt.Sprintf("./out/%s", url))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -62,11 +63,8 @@ func Test_scope(T *testing.T) {
 
 	err = internal.Process(workflow, config, logger)
 	if err != nil {
-		//This error is caused by the task to being too fast. So the logs can't be read.
-		if err.Error() != "Error response from daemon: can not get logs from container which is dead or marked for removal" {
-			fmt.Println(err.Error())
-			T.Fail()
-		}
+		fmt.Println(err)
+		T.Fail()
 	}
 
 	dat, err := os.ReadFile(fmt.Sprintf("./out/%s/validScope.txt", url))

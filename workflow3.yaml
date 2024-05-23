@@ -1,7 +1,0 @@
----
-tasks:
-  1:
-    name: "validateScope"
-    commands:
-      - "curl https://ipinfo.io/ip"
-      - "sleep 2"
