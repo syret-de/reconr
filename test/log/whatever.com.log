@@ -1,9 +1,0 @@
-2024/05/07 10:56:55.181507 [*] Docker build started
-2024/05/07 10:56:55.183862 [*] Task 1 Started
-2024/05/07 10:56:55.183895 [*] Docker run echo '192.168.10.10
-192.168.20.10
-127.0.0.1' > target.txt;cat target.txt| grepcidr -f scope.txt > validScope.txt
-2024/05/07 10:56:55.349946 [*] Created container 03b3cfd4cba4bceb582c45de018a879048b6ef714cf9ca22c39dcb8349482883
-2024/05/07 10:56:55.450993 [*] Started container 03b3cfd4cba4bceb582c45de018a879048b6ef714cf9ca22c39dcb8349482883
-2024/05/07 10:56:55.501731 [*] Task to short, no stdout
-2024/05/07 10:56:55.501763 [*] Stopped container 03b3cfd4cba4bceb582c45de018a879048b6ef714cf9ca22c39dcb8349482883

@@ -1,6 +1,4 @@
 /log/*
 /out/**
 .idea
-/proxy/
-/test/
-/config/*
+/config/**

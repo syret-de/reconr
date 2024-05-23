@@ -1,7 +1,0 @@
----
-tasks:
-  1:
-    name: "scope"
-    commands:
-      - "echo '192.168.10.10\n192.168.20.10\n127.0.0.1' > target.txt"
-      - "cat target.txt| grepcidr -f scope.txt > validScope.txt"
