@@ -32,7 +32,10 @@ func NewDocker(config Config) (Docker, error) {
 		return Docker{}, err
 	}
 	defer cli.Close()
-
+	err = os.MkdirAll(config.GetConfigPath(), os.ModePerm)
+	if err != nil {
+		return Docker{}, err
+	}
 	return Docker{ctx: ctx, cli: cli, config: config}, nil
 }
 
