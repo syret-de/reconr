@@ -1,4 +1,4 @@
 /log/*
 /out/**
 .idea
-/config/
+/config/*
