@@ -17,7 +17,7 @@ tasks:
   4:
     name: "portScan"
     commands:
-      - "naabu -l validDomains.txt -duc -Pn -o naabu.txt"
+      - "naabu -l validDomains.txt -duc -Pn -s c -o naabu.txt"
   5:
     name: "validatePorts"
     commands:
@@ -46,5 +46,5 @@ tasks:
   8:
     name: "vulnScan"
     commands:
-      - "nuclei -l validPorts.txt -c 100 -jle nuclei.txt"
+      - "nuclei -l validPorts.txt -c 100 -severity info -tags dns -jle nuclei.txt"
 
