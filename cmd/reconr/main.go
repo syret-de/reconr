@@ -16,13 +16,14 @@ func main() {
 	// Initialize configuration
 	config, err := internal.NewConfig(*configFile)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		log.Println(err)
 	}
 
 	// Initialize logger
 	logger, err := internal.NewLogger(config.GetLogPath(), config.GetTarget())
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 
 	log.Println("=========================")
@@ -34,24 +35,28 @@ func main() {
 	// Initialize scope
 	scope, err := internal.NewScope(config.GetScope(), path)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		log.Println(err)
 	}
 	scopePath := fmt.Sprintf("%s/%s", path, config.GetScopeFileName())
 	err = scope.WriteScope(scopePath)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		log.Println(err)
 	}
 
 	// Initialize workflow
 	workflow, err := internal.NewWorkflow(*workflowFile, config)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		log.Println(err)
 	}
 
 	// Process workflow
 	err = internal.Process(workflow, config, logger)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		log.Println(err)
 	}
 
 	log.Println("=====================")
