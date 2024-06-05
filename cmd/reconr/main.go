@@ -9,7 +9,7 @@ import (
 
 func main() {
 	// Parse command line flags
-	workflowFile := flag.String("workflow", "workflowFinal.yaml", "Path to the workflow file")
+	workflowFile := flag.String("workflow", "workflow.yaml", "Path to the workflow file")
 	configFile := flag.String("config", "config.yaml", "Path to the config file")
 	flag.Parse()
 

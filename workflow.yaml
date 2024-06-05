@@ -46,5 +46,5 @@ tasks:
   8:
     name: "vulnScan"
     commands:
-      - "nuclei -l validPorts.txt -c 100 -severity info -tags dns -jle nuclei.txt"
+      - "nuclei -l validPorts.txt -c 100 -severity info -jle nuclei.txt"
 
