@@ -1,21 +1,12 @@
 # Reconr
 
-
-## Table of Contents
-1. [Introduction](#introduction)
-2. [Installation](#installation)
-3. [Usage](#usage)
-4. [Configuration](#configuration)
-5. [Examples](#examples)
-6. [Contributing](#contributing)
-7. [License](#license)
-
 ## Introduction
 
 Reconr is an automation tool designed to automate pentesting tasks. 
 The core concept revolves around using workflow files, which define a list of tasks that can be applied to multiple targets. 
 This approach simplifies repetitive pentesting processes and enhances efficiency.
 
+> This tool as been developed by Yann Grossenbacher while working for Syret Gmbh
 
 ## Installation
 
