@@ -136,4 +136,3 @@ cat httpx.txt | grep '"status_code":500' | jq .url
 ## How it works
 ![](./img/reconr.png)
 
-## License
